@@ -37,7 +37,9 @@ class Captcha
     {
         Session::set($string = String::get($count));
 
-        return (new Image($string, $width, $height))->base64();
+        $image = new Image($string, $width, $height);
+
+        return $image->base64();
     }
 
     public static function img($count, $width, $height, array $attr = array())
