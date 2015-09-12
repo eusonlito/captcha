@@ -132,14 +132,18 @@ Captcha::addFont(array(
     __DIR__.'/../fonts/brush-lettering-one.ttf'
 ));
 
-# Set custom rgb background
-Captcha::setBackground(120, 120, 120); // Default is 255, 255, 255
+# Set custom rgb background. Default is 255, 255, 255
+Captcha::setBackground(120, 120, 120); //
 
-# Set custom available letters
-Captcha::setLetters('ABCDE3456'); // Default are 'ABCDEFGHJKLMNPRSTUVWXYZ'
+# Set custom padding to captcha image (approximate). Default is 0.4
+Captcha::setPadding(20); // Fixed value in pixels
+Captcha::setPadding(0.4); // Percent value
 
-# Set custom session name captcha storage (captcha string is stored crypted)
-Captcha::sessionName('my-captcha'); // Default is 'captcha-string'
+# Set custom available letters. Default are 'ABCDEFGHJKLMNPRSTUVWXYZ'
+Captcha::setLetters('ABCDE3456');
+
+# Set custom session name captcha storage (captcha string is stored crypted). Default is 'captcha-string'
+Captcha::sessionName('my-captcha');
 
 # Enable session before use on non session environments
 Captcha::sessionStart();
