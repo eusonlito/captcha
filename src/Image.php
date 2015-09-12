@@ -34,7 +34,8 @@ class Image
         return 'data:image/png;base64,'.base64_encode($string);
     }
 
-    private function getTextSize(array $data) {
+    private function getTextSize(array $data)
+    {
         $rect = imagettfbbox($data['size'], $data['angle'], $data['font'], $data['text']);
 
         $ascent = abs($rect[7]);
@@ -108,7 +109,7 @@ class Image
             $previous = $letters;
         }
 
-        $x = intval(($width - array_sum(array_map(function($row) {
+        $x = intval(($width - array_sum(array_map(function ($row) {
             return $row['width'];
         }, $letters))) / 2);
 
