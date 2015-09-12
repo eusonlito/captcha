@@ -109,6 +109,18 @@ class Tests extends PHPUnit_Framework_TestCase
         $this->assertNotTrue(isset($_POST[Captcha\Captcha::sessionName()]));
     }
 
+    public function testSetPadding()
+    {
+        Captcha\Captcha::setPadding(50);
+        Captcha\Captcha::setPadding(0.5);
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+        $this->assertTrue(!empty($_SESSION[Captcha\Captcha::sessionName()]));
+        $this->assertFalse(Captcha\Captcha::check());
+        $this->assertNotTrue(isset($_SESSION[Captcha\Captcha::sessionName()]));
+        $this->assertNotTrue(isset($_POST[Captcha\Captcha::sessionName()]));
+    }
+
     public function testSetLetters()
     {
         $_POST[Captcha\Captcha::sessionName()] = 'AAAA';

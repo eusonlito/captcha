@@ -33,6 +33,11 @@ class Captcha
         return Image::background($r, $g, $b);
     }
 
+    public static function setPadding($padding)
+    {
+        return Image::padding($padding);
+    }
+
     public static function source($count, $width, $height)
     {
         Session::set($string = String::get($count));

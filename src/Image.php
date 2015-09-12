@@ -5,6 +5,7 @@ class Image
 {
     private $image;
     private static $background = array(255, 255, 255);
+    private static $padding = 0.4;
 
     public function __construct($text, $width, $height)
     {
@@ -19,6 +20,11 @@ class Image
     public static function background($r, $g, $b)
     {
         self::$background = array($r, $g, $b);
+    }
+
+    public static function padding($padding)
+    {
+        self::$padding = is_int($padding) ? ($padding * 2) : (float)$padding;
     }
 
     public function base64()
@@ -93,8 +99,15 @@ class Image
     {
         $strlen = strlen($text);
         $allFonts = Font::get();
-        $maxWidth = $width - ($width * 0.2);
-        $maxHeight = $height - ($height * 0.2);
+
+        if (is_int(self::$padding)) {
+            $maxWidth = $width - self::$padding;
+            $maxHeight = $height - self::$padding;
+        } else {
+            $maxWidth = $width - ($width * self::$padding);
+            $maxHeight = $height - ($height * self::$padding);
+        }
+
         $letters = $previous = array();
         $fontSize = 14;
 
