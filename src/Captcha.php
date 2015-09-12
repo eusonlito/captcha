@@ -59,7 +59,7 @@ class Captcha
             .' '.implode(' ', array_map(function($key, $value) {
                 return $key.'="'.$value.'"';
             }, array_keys($attr), $attr))
-            .'/>';
+            .' required />';
     }
 
     public static function check()
