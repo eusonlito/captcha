@@ -1,6 +1,9 @@
 <?php
 namespace Eusonlito\Captcha;
 
+/**
+ * Class to manage image
+ */
 class Image
 {
     private $image;
@@ -9,6 +12,20 @@ class Image
     private static $noisePoints;
     private static $noiseLines;
 
+    /**
+     * Load the class and process the captcha
+     *
+     * @param string $text
+     *     Text string to catpcha image
+     *
+     * @param integer $width
+     *     Image width
+     *
+     * @param integer $height
+     *     Image height
+     *
+     * @return object
+     */
     public function __construct($text, $width, $height)
     {
         $this->image = imagecreatetruecolor($width, $height);
@@ -19,22 +36,55 @@ class Image
         return $this;
     }
 
+    /**
+     * Set the background color
+     *
+     * @param integer $r
+     *     Color red value
+     *
+     * @param integer $g
+     *     Color green value
+     *
+     * @param integer $b
+     *     Color blue value
+     */
     public static function background($r, $g, $b)
     {
         self::$background = array($r, $g, $b);
     }
 
+    /**
+     * Set image padding
+     *
+     * @param integer|float $padding
+     *     Image padding value.
+     *     Integer is used as fixed pixels and float will be used as percent.
+     */
     public static function padding($padding)
     {
         self::$padding = is_int($padding) ? ($padding * 2) : (float)$padding;
     }
 
+    /**
+     * Set image points and lines noise
+     *
+     * @param integer|array $points
+     *     Integer is used as fixed points number and array as a min and max values.
+     *
+     * @param integer|array $lines
+     *     Integer is used as fixed lines number and array as a min and max values.
+     */
     public static function noise($points, $lines)
     {
         self::$noisePoints = $points;
         self::$noiseLines = $lines;
     }
 
+    /**
+     * Returns the base64 image source
+     *
+     * @return string
+     */
     public function base64()
     {
         ob_start();
@@ -48,6 +98,14 @@ class Image
         return 'data:image/png;base64,'.base64_encode($string);
     }
 
+    /**
+     * Calculate text size using font, angle, size and text values
+     *
+     * @param array $data
+     *     The data set (font, angle, size and text) to calculate the size
+     *
+     * @return array
+     */
     private function getTextSize(array $data)
     {
         $rect = imagettfbbox($data['size'], $data['angle'], $data['font'], $data['text']);
@@ -64,6 +122,15 @@ class Image
         );
     }
 
+    /**
+     * Set the background color
+     *
+     * @param integer $width
+     *     Image width
+     *
+     * @param integer $height
+     *     Image height
+     */
     private function setBackground($width, $height)
     {
         list($r, $g, $b) = self::$background;
@@ -71,6 +138,35 @@ class Image
         imagefilledrectangle($this->image, 0, 0, $width, $height, imagecolorallocate($this->image, $r, $g, $b));
     }
 
+    /**
+     * Check if letters fit into the image limits
+     *
+     * @param string $text
+     *     Text to use
+     *
+     * @param integer $strlen
+     *     Lenght of the text
+     *
+     * @param integer $fontSize
+     *     Font size to check if fit
+     *
+     * @param array $allFonts
+     *     The fonts collection
+     *
+     * @param integer $width
+     *     Image width
+     *
+     * @param integer $height
+     *     Image height
+     *
+     * @param integer $maxWidth
+     *     Max image width to use
+     *
+     * @param integer $maxHeight
+     *     Max image hieght to use
+     *
+     * @return array
+     */
     private function getLetters($text, $strlen, $fontSize, $allFonts, $width, $height, $maxWidth, $maxHeight)
     {
         $letters = array();
@@ -103,6 +199,18 @@ class Image
         return $letters;
     }
 
+    /**
+     * Set the text into the image
+     *
+     * @param string $text
+     *     The captcha text
+     *
+     * @param integer $width
+     *     Image width
+     *
+     * @param integer $height
+     *     Image height
+     */
     private function setText($text, $width, $height)
     {
         $strlen = strlen($text);
@@ -158,6 +266,15 @@ class Image
         }
     }
 
+    /**
+     * Generate noise points
+     *
+     * @param integer $width
+     *     Image width
+     *
+     * @param integer $height
+     *     Image height
+     */
     private function noisePoints($width, $height)
     {
         $noise = $this->randomColor();
@@ -174,6 +291,15 @@ class Image
         }
     }
 
+    /**
+     * Generate noise lines
+     *
+     * @param integer $width
+     *     Image width
+     *
+     * @param integer $height
+     *     Image height
+     */
     private function noiseLines($width, $height)
     {
         $noise = $this->randomColor();
@@ -212,11 +338,21 @@ class Image
         }
     }
 
+    /**
+     * Generate a random color to use with image functions
+     *
+     * @return object
+     */
     private function randomColor()
     {
         return imagecolorallocate($this->image, rand(150, 200), rand(150, 200), rand(150, 200));
     }
 
+    /**
+     * Generate a random float number
+     *
+     * @return float
+     */
     private function frand()
     {
         return 0.0001 * mt_rand(0, 9999);
