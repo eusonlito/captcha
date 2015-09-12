@@ -44,26 +44,41 @@ class Captcha
 
     public static function img($count, $width, $height, array $attr = array())
     {
-        return '<img src="'.self::source($count, $width, $height).'"'
-            .' width="'.$width.'"'
-            .' height="'.$height.'"'
-            .' '.implode(' ', array_map(function($key, $value) {
-                return $key.'="'.$value.'"';
-            }, array_keys($attr), $attr))
-            .'/>';
+        return self::tag(array_merge(array(
+            'img',
+            'src' => self::source($count, $width, $height),
+            'width' => $width,
+            'height' => $height,
+        ), $attr));
     }
 
     public static function input(array $attr = array())
     {
-        return '<input type="text" name="'.Session::name().'"'
-            .' '.implode(' ', array_map(function($key, $value) {
-                return $key.'="'.$value.'"';
-            }, array_keys($attr), $attr))
-            .' required />';
+        return self::tag(array_merge(array(
+            'input',
+            'type' => 'text',
+            'name' => Session::name(),
+            'required'
+        ), $attr));
     }
 
     public static function check()
     {
         return Session::check();
+    }
+
+    private static function tag(array $attributes = array())
+    {
+        $html = '<';
+
+        foreach ($attributes as $key => $value) {
+            if (is_numeric($key)) {
+                $html .= $value.' ';
+            } else {
+                $html .= $key.'="'.$value.'" ';
+            }
+        }
+
+        return trim($html).' />';
     }
 }

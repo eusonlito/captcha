@@ -31,8 +31,7 @@ class Tests extends PHPUnit_Framework_TestCase
     {
         $img = Captcha\Captcha::img(array(5, 6), 385, 90);
 
-        $this->assertTrue(strpos($img, '<img src=') === 0);
-        $this->assertTrue(strstr($img, 'data:image/png;base64,') ? true : false);
+        $this->assertTrue(preg_match('#^<img src="data:image/png;base64,[^"]+" width="385" height="90" />$#', $img) === 1);
         $this->assertTrue(!empty($_SESSION[Captcha\Captcha::sessionName()]));
         $this->assertFalse(Captcha\Captcha::check());
         $this->assertNotTrue(isset($_SESSION[Captcha\Captcha::sessionName()]));
@@ -42,9 +41,7 @@ class Tests extends PHPUnit_Framework_TestCase
             'class' => 'img-responsive'
         ));
 
-        $this->assertTrue(strpos($img, '<img src=') === 0);
-        $this->assertTrue(strstr($img, 'class="img-responsive"') ? true : false);
-        $this->assertTrue(strstr($img, 'data:image/png;base64,') ? true : false);
+        $this->assertTrue(preg_match('#^<img src="data:image/png;base64,[^"]+" width="385" height="90" class="img-responsive" />$#', $img) === 1);
         $this->assertTrue(!empty($_SESSION[Captcha\Captcha::sessionName()]));
         $this->assertFalse(Captcha\Captcha::check());
         $this->assertNotTrue(isset($_SESSION[Captcha\Captcha::sessionName()]));
@@ -55,14 +52,13 @@ class Tests extends PHPUnit_Framework_TestCase
     {
         $input = Captcha\Captcha::input();
 
-        $this->assertTrue(strpos($input, '<input type="text"') === 0);
+        $this->assertTrue(preg_match('#^<input type="text" name="'.Captcha\Captcha::sessionName().'" required />$#', $input) === 1);
 
         $input = Captcha\Captcha::input(array(
             'class' => 'form-control'
         ));
 
-        $this->assertTrue(strpos($input, '<input type="text"') === 0);
-        $this->assertTrue(strstr($input, 'class="form-control"') ? true : false);
+        $this->assertTrue(preg_match('#^<input type="text" name="'.Captcha\Captcha::sessionName().'" required class="form-control" />$#', $input) === 1);
     }
 
     public function testSetFont()
