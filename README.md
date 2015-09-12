@@ -139,6 +139,12 @@ Captcha::setBackground(120, 120, 120); //
 Captcha::setPadding(20); // Fixed value in pixels
 Captcha::setPadding(0.4); // Percent value
 
+# Set image noise. Default is without noise
+Captcha::setNoise($POINTS, $LINES); // Fixed points and lines noise
+Captcha::setNoise(array($POINTS_MIN, $POINTS_MAX), array($LINES_MIN, $LINES_MAX)); // Variable points and lines noise
+Captcha::setNoise(null, array($LINES_MIN, $LINES_MAX)); // Avoid points noise
+Captcha::setNoise(array($POINTS_MIN, $POINTS_MAX), null); // Avoid points noise
+
 # Set custom available letters. Default are 'ABCDEFGHJKLMNPRSTUVWXYZ'
 Captcha::setLetters('ABCDE3456');
 

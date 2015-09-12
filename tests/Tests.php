@@ -121,6 +121,27 @@ class Tests extends PHPUnit_Framework_TestCase
         $this->assertNotTrue(isset($_POST[Captcha\Captcha::sessionName()]));
     }
 
+    public function testSetNoise()
+    {
+        Captcha\Captcha::setNoise(10, 10);
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        Captcha\Captcha::setNoise(array(1, 10), 10);
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        Captcha\Captcha::setNoise(10, array(1, 10));
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        Captcha\Captcha::setNoise(array(1, 10), array(1, 10));
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        Captcha\Captcha::setNoise(null, array(1, 10));
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        Captcha\Captcha::setNoise(array(1, 10), null);
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+    }
+
     public function testSetLetters()
     {
         $_POST[Captcha\Captcha::sessionName()] = 'AAAA';

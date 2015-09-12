@@ -38,6 +38,11 @@ class Captcha
         return Image::padding($padding);
     }
 
+    public static function setNoise($points, $lines)
+    {
+        return Image::noise($points, $lines);
+    }
+
     public static function source($count, $width, $height)
     {
         Session::set($string = String::get($count));
