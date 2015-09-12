@@ -5,16 +5,14 @@
 [![Total Downloads](https://poser.pugx.org/eusonlito/captcha/downloads.png)](https://packagist.org/packages/eusonlito/captcha)
 [![License](https://poser.pugx.org/eusonlito/captcha/license.png)](https://packagist.org/packages/eusonlito/captcha)
 
-This is a configurable and easy-to-implement captcha package.
+A new simple and easy-to-implement captcha package.
 
-## Installation
+## Installation with Composer
 
-Begin by installing this package through Composer.
-
-```js
+```json
 {
     "require": {
-        "eusonlito/captcha": "master-dev"
+        "eusonlito/captcha": "0.*"
     }
 }
 ```
@@ -24,35 +22,41 @@ Begin by installing this package through Composer.
 ### Template
 
 ```php
-use Eusonlito\Captcha\Captcha
+<?php use Eusonlito\Captcha\Captcha; ?>
 
 <div class="form-group">
-    <img src="<?= Captcha::source($LETTERS_COUNT, $WIDTH, $HEIGHT) ?>" />
-    <input type="text" name="<?= Captcha::sessionName() ?>" value="" />
+    <img src="<?= Captcha::source($LETTERS_COUNT, $WIDTH, $HEIGHT); ?>" class="img-responsive" />
+    <input type="text" name="<?= Captcha::sessionName(); ?>" value="" class="form-control" />
 
     ... or ...
 
-    <?= Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT) ?>
-    <input type="text" name="<?= Captcha::sessionName() ?>" value="" />
+    <?= Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT); ?>
+    <input type="text" name="<?= Captcha::sessionName(); ?>" value="" class="form-control" />
 
     ... or ...
 
-    <?= Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT) ?>
-    <?= Captcha::input(array('class' => 'form-control')) ?>
+    <?= Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT, array('class' => 'img-responsive')); ?>
+    <input type="text" name="<?= Captcha::sessionName(); ?>" value="" class="form-control" />
 
     ... or ...
 
-    <?= Captcha::img(array($LETTERS_MIN, $LETTERS_MAX) $WIDTH, $HEIGHT) ?>
-    <?= Captcha::input(array('class' => 'form-control')) ?>
+    <?= Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT); ?>
+    <?= Captcha::input(array('class' => 'form-control')); ?>
+
+    ... or ...
+
+    <?= Captcha::img(array($LETTERS_MIN, $LETTERS_MAX) $WIDTH, $HEIGHT); ?>
+    <?= Captcha::input(array('class' => 'form-control')); ?>
 </div>
 ```
 
-If you are using a non session environment, you must add `Captcha::sessionStart()` to your controller.
+If you are using an environment without sessions, you must add `Captcha::sessionStart()` before any html output (Controller).
 
 ### Checking
 
 ```php
-use Eusonlito\Captcha\Captcha
+<?php
+use Eusonlito\Captcha\Captcha;
 
 function validate()
 {
@@ -67,6 +71,7 @@ That's all!
 ### Laravel Usage
 
 ```php
+<?php
 # config/app.php
 
 return [
@@ -83,3 +88,61 @@ return [
 ```
 
 Now you will have a `Captcha` class available on your controllers and views.
+
+## Print Options
+
+```php
+<?php
+use Eusonlito\Captcha\Captcha;
+
+# Simple usage with fixed word length
+Captcha::source($LETTERS_COUNT, $WIDTH, $HEIGHT); # Print base64 source image code
+
+# Define min and max word length
+Captcha::source(array($LETTERS_MIN, $LETTERS_MAX), $WIDTH, $HEIGHT); # Print base64 source image code
+
+# Same using img tag
+Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT); # Print img tag
+Captcha::img(array($LETTERS_MIN, $LETTERS_MAX), $WIDTH, $HEIGHT); # Print img tag
+
+# Img tag with parameters
+Captcha::img($LETTERS_COUNT, $WIDTH, $HEIGHT, array('class' => 'img-responsive')); # Print img tag with class attribute
+
+# Simple input tag print
+Captcha::input(); # Print input tag
+
+# Input tag with parameters
+Captcha::input(array('class' => 'form-control')); # Print input tag with class attribute
+```
+
+## Custom Setup
+
+All custom settings will be defined before `img`, `source` or `check` methods calls.
+
+```php
+<?php
+use Eusonlito\Captcha\Captcha;
+
+# Define a unique font to use (only .ttf)
+Captcha::setFont(__DIR__.'/../fonts/couture-bold.ttf'); # string or array
+
+# Add fonts to repository (only .ttf)
+Captcha::addFont(array(
+    __DIR__.'/../fonts/couture-bold.ttf',
+    __DIR__.'/../fonts/brush-lettering-one.ttf'
+));
+
+# Set custom rgb background
+Captcha::setBackground(120, 120, 120); // Default is 255, 255, 255
+
+# Set custom available letters
+Captcha::setLetters('ABCDE3456'); // Default are 'ABCDEFGHJKLMNPRSTUVWXYZ'
+
+# Set custom session name captcha storage (captcha string is stored crypted)
+Captcha::sessionName('my-captcha'); // Default is 'captcha-string'
+
+# Enable session before use on non session environments
+Captcha::sessionStart();
+```
+
+Enjoy!
