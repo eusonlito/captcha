@@ -17,6 +17,18 @@ A new simple and easy-to-implement captcha package.
 }
 ```
 
+## Demos
+
+![Default Captcha](https://eusonlito.github.io/captcha/assets/images/multiple-fonts.png)
+![Only one font](https://eusonlito.github.io/captcha/assets/images/one-font.png)
+![Large Captcha](https://eusonlito.github.io/captcha/assets/images/large.png)
+![Short Captcha](https://eusonlito.github.io/captcha/assets/images/short.png)
+![With Background](https://eusonlito.github.io/captcha/assets/images/background.png)
+![Custom Letters](https://eusonlito.github.io/captcha/assets/images/letters.png)
+![With Noise](https://eusonlito.github.io/captcha/assets/images/noise.png)
+![Only Noise Points](https://eusonlito.github.io/captcha/assets/images/noise-points.png)
+![Only Noise Lines](https://eusonlito.github.io/captcha/assets/images/noise-lines.png)
+
 ## Usage
 
 ### Template
