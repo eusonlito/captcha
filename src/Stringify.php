@@ -4,7 +4,7 @@ namespace Eusonlito\Captcha;
 /**
  * Class to manage string generation
  */
-class String
+class Stringify
 {
     private static $letters = 'ABCDEFGHJKLMNPRSTUVWXYZ';
 

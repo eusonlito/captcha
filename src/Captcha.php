@@ -38,7 +38,7 @@ class Captcha
      */
     public static function setLetters($letters)
     {
-        String::letters($letters);
+        Stringify::letters($letters);
     }
 
     /**
@@ -128,7 +128,7 @@ class Captcha
      */
     public static function source($count, $width, $height)
     {
-        Session::set($string = String::get($count));
+        Session::set($string = Stringify::get($count));
 
         $image = new Image($string, $width, $height);
 
