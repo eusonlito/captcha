@@ -51,12 +51,12 @@ class Session
             && strlen($_POST[$n])
             && ($_SESSION[$n] === crypt(strtolower($_POST[$n]), self::salt()));
 
-        if (isset($_SESSION[$n])) {
-            unset($_SESSION[$n]);
-        }
-
         if (isset($_POST[$n])) {
             unset($_POST[$n]);
+        }
+
+        if ($valid && isset($_SESSION[$n])) {
+            unset($_SESSION[$n]);
         }
 
         return $valid;
