@@ -129,7 +129,7 @@ class Tests extends PHPUnit_Framework_TestCase
 
     public function testSetBackground()
     {
-        Captcha\Captcha::setBackground([255, 255, 255]);
+        Captcha\Captcha::setBackground(array(255, 255, 255));
 
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
 
@@ -162,7 +162,7 @@ class Tests extends PHPUnit_Framework_TestCase
 
     public function testSetColor()
     {
-        Captcha\Captcha::setColor([10, 10, 10]);
+        Captcha\Captcha::setColor(array(10, 10, 10));
 
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
 
