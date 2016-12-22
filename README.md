@@ -12,7 +12,7 @@ A new simple and easy-to-implement captcha package.
 ```json
 {
     "require": {
-        "eusonlito/captcha": "0.*"
+        "eusonlito/captcha": "1.0.*"
     }
 }
 ```
@@ -145,10 +145,19 @@ Captcha::addFont(array(
 ));
 
 # Set custom rgb background. Default is 255, 255, 255
-Captcha::setBackground(120, 120, 120);
+Captcha::setBackground([120, 120, 120]);
+
+# Set custom hex background.
+Captcha::setBackground('#FFF000');
+
+# Set transparent background.
+Captcha::setBackground('transparent');
 
 # Set custom rgb font color. Default is 115, 115, 115
-Captcha::setColor(50, 50, 50);
+Captcha::setColor([50, 50, 50]);
+
+# Set custom hex color.
+Captcha::setColor('#000FFF');
 
 # Set custom padding to captcha image (approximate). Default is 0.4
 Captcha::setPadding(20); // Fixed value in pixels

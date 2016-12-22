@@ -72,35 +72,23 @@ class Captcha
     /**
      * Set the font color
      *
-     * @param integer $r
-     *     Color red value
-     *
-     * @param integer $g
-     *     Color green value
-     *
-     * @param integer $b
-     *     Color blue value
+     * @param mixed $value
+     *     RGB[array] / HEX[string] / Name[string] color value
      */
-    public static function setColor($r, $g, $b)
+    public static function setColor($value)
     {
-        Image::color($r, $g, $b);
+        Image::color($value);
     }
 
     /**
      * Set the background color
      *
-     * @param integer $r
-     *     Color red value
-     *
-     * @param integer $g
-     *     Color green value
-     *
-     * @param integer $b
-     *     Color blue value
+     * @param mixed $value
+     *     RGB[array] / HEX[string] / Name[string] color value
      */
-    public static function setBackground($r, $g, $b)
+    public static function setBackground($value)
     {
-        Image::background($r, $g, $b);
+        Image::background($value);
     }
 
     /**

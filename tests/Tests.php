@@ -10,19 +10,10 @@ class Tests extends PHPUnit_Framework_TestCase
         $_POST[Captcha\Captcha::sessionName()] = 'AAAA';
     }
 
-    public function testLoad()
-    {
-        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertNotTrue(empty($_SESSION[Captcha\Captcha::sessionName()]));
-    }
-
-    public function testTrue()
+    public function checkTrue()
     {
         $session = Captcha\Captcha::sessionName();
 
-        Captcha\Captcha::setLetters('AAAAAA');
-
-        $this->assertTrue(strpos(Captcha\Captcha::source(4, 385, 90), 'data:image/png;base64,') === 0);
         $this->assertTrue(!empty($_SESSION[$session]));
 
         $this->assertTrue(Captcha\Captcha::check());
@@ -31,59 +22,64 @@ class Tests extends PHPUnit_Framework_TestCase
         $this->assertNotTrue(isset($_POST[$session]));
     }
 
+    public function checkFalse()
+    {
+        $session = Captcha\Captcha::sessionName();
+
+        $this->assertTrue(!empty($_SESSION[$session]));
+
+        $this->assertFalse(Captcha\Captcha::check());
+
+        $this->assertTrue(isset($_SESSION[$session]));
+        $this->assertNotTrue(isset($_POST[$session]));
+    }
+
+    public function testLoad()
+    {
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+        $this->assertNotTrue(empty($_SESSION[Captcha\Captcha::sessionName()]));
+    }
+
+    public function testTrue()
+    {
+        Captcha\Captcha::setLetters('AAAAAA');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(4, 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkTrue();
+    }
+
     public function testFalse()
     {
         Captcha\Captcha::setLetters('000000');
 
-        $session = Captcha\Captcha::sessionName();
-
         $this->assertTrue(strpos(Captcha\Captcha::source(4, 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
     }
 
     public function testAll()
     {
-        $session = Captcha\Captcha::sessionName();
-
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
     }
 
     public function testImg()
     {
-        $session = Captcha\Captcha::sessionName();
-
         $img = Captcha\Captcha::img(array(5, 6), 385, 90);
 
         $this->assertTrue(preg_match('#^<img src="data:image/png;base64,[^"]+" width="385" height="90" />$#', $img) === 1);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
 
         $img = Captcha\Captcha::img(array(5, 6), 385, 90, array(
             'class' => 'img-responsive'
         ));
 
         $this->assertTrue(preg_match('#^<img src="data:image/png;base64,[^"]+" width="385" height="90" class="img-responsive" />$#', $img) === 1);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
     }
 
     public function testInput()
@@ -102,16 +98,12 @@ class Tests extends PHPUnit_Framework_TestCase
 
     public function testSetFont()
     {
-        $session = Captcha\Captcha::sessionName();
-
         Captcha\Captcha::setFont(__DIR__.'/../fonts/couture-bold.ttf');
 
         $this->assertTrue(count(Captcha\Font::get()) === 1);
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
-        $this->assertFalse(Captcha\Captcha::check());
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+
+        $this->checkFalse();
 
         Captcha\Captcha::setFont(array(
             __DIR__.'/../fonts/couture-bold.ttf',
@@ -120,23 +112,15 @@ class Tests extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(count(Captcha\Font::get()) === 2);
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
 
         Captcha\Captcha::addFont(__DIR__.'/../fonts/sketch-match.ttf');
 
         $this->assertTrue(count(Captcha\Font::get()) === 3);
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
 
         $this->setExpectedException('Exception');
 
@@ -145,54 +129,76 @@ class Tests extends PHPUnit_Framework_TestCase
 
     public function testSetBackground()
     {
-        $session = Captcha\Captcha::sessionName();
-
-        Captcha\Captcha::setBackground(255, 255, 255);
+        Captcha\Captcha::setBackground([255, 255, 255]);
 
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
+        $this->checkFalse();
 
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        Captcha\Captcha::setBackground('white');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
+
+        Captcha\Captcha::setBackground('#FF00FF');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
+
+        Captcha\Captcha::setBackground('FF00FF');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
+
+        Captcha\Captcha::setBackground('transparent');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
     }
 
     public function testSetColor()
     {
-        $session = Captcha\Captcha::sessionName();
-
-        Captcha\Captcha::setColor(10, 10, 10);
+        Captcha\Captcha::setColor([10, 10, 10]);
 
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
+        $this->checkFalse();
 
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        Captcha\Captcha::setColor('white');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
+
+        Captcha\Captcha::setColor('#FF00FF');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
+
+        Captcha\Captcha::setColor('FF00FF');
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+
+        $this->checkFalse();
     }
 
     public function testSetPadding()
     {
-        $session = Captcha\Captcha::sessionName();
-
         Captcha\Captcha::setPadding(50);
         Captcha\Captcha::setPadding(0.5);
 
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
     }
 
     public function testSetNoise()
     {
-        $session = Captcha\Captcha::sessionName();
-
         Captcha\Captcha::setNoise(10, 10);
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
 
@@ -214,41 +220,25 @@ class Tests extends PHPUnit_Framework_TestCase
 
     public function testSetLetters()
     {
-        $session = Captcha\Captcha::sessionName();
-
         Captcha\Captcha::setLetters('AAAAAA');
 
         $this->assertTrue(strpos(Captcha\Captcha::source(4, 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertTrue(Captcha\Captcha::check());
-
-        $this->assertNotTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkTrue();
 
         Captcha\Captcha::setLetters('000000');
 
         $this->assertTrue(strpos(Captcha\Captcha::source(4, 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION[$session]));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION[$session]));
-        $this->assertNotTrue(isset($_POST[$session]));
+        $this->checkFalse();
     }
 
     public function testSessionName()
     {
-        $session = Captcha\Captcha::sessionName();
-
         Captcha\Captcha::sessionName('captcha-test');
 
         $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
-        $this->assertTrue(!empty($_SESSION['captcha-test']));
 
-        $this->assertFalse(Captcha\Captcha::check());
-
-        $this->assertTrue(isset($_SESSION['captcha-test']));
-        $this->assertNotTrue(isset($_POST['captcha-test']));
+        $this->checkFalse();
     }
 }

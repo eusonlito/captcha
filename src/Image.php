@@ -7,8 +7,8 @@ namespace Eusonlito\Captcha;
 class Image
 {
     private $image;
-    private static $background = array(255, 255, 255);
-    private static $color = array(115, 115, 115);
+    private static $background = array(255, 255, 255, 1);
+    private static $color = array(115, 115, 115, 1);
     private static $padding = 0.4;
     private static $noisePoints;
     private static $noiseLines;
@@ -40,35 +40,23 @@ class Image
     /**
      * Set the background color
      *
-     * @param integer $r
-     *     Color red value
-     *
-     * @param integer $g
-     *     Color green value
-     *
-     * @param integer $b
-     *     Color blue value
+     * @param mixed $value
+     *     RGB[array] / HEX[string] / Name[string] color value
      */
-    public static function background($r, $g, $b)
+    public static function background($value)
     {
-        self::$background = array($r, $g, $b);
+        self::$background = Color::toRGBA($value);
     }
 
     /**
      * Set the font color
      *
-     * @param integer $r
-     *     Color red value
-     *
-     * @param integer $g
-     *     Color green value
-     *
-     * @param integer $b
-     *     Color blue value
+     * @param mixed $value
+     *     RGB[array] / HEX[string] / Name[string] color value
      */
-    public static function color($r, $g, $b)
+    public static function color($value)
     {
-        self::$color = array($r, $g, $b);
+        self::$color = Color::toRGBA($value);
     }
 
     /**
@@ -151,9 +139,15 @@ class Image
      */
     private function setBackground($width, $height)
     {
-        list($r, $g, $b) = self::$background;
+        list($r, $g, $b, $a) = self::$background;
 
-        imagefilledrectangle($this->image, 0, 0, $width, $height, imagecolorallocate($this->image, $r, $g, $b));
+        $color = imagecolorallocate($this->image, $r, $g, $b);
+
+        if ($a === 0) {
+            imagecolortransparent($this->image, $color);
+        }
+
+        imagefilledrectangle($this->image, 0, 0, $width, $height, $color);
     }
 
     /**
