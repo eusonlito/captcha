@@ -8,6 +8,7 @@ class Image
 {
     private $image;
     private static $background = array(255, 255, 255);
+    private static $color = array(115, 115, 115);
     private static $padding = 0.4;
     private static $noisePoints;
     private static $noiseLines;
@@ -51,6 +52,23 @@ class Image
     public static function background($r, $g, $b)
     {
         self::$background = array($r, $g, $b);
+    }
+
+    /**
+     * Set the font color
+     *
+     * @param integer $r
+     *     Color red value
+     *
+     * @param integer $g
+     *     Color green value
+     *
+     * @param integer $b
+     *     Color blue value
+     */
+    public static function color($r, $g, $b)
+    {
+        self::$color = array($r, $g, $b);
     }
 
     /**
@@ -257,7 +275,7 @@ class Image
                 $letter['angle'],
                 $x,
                 $letter['y'],
-                imagecolorallocate($this->image, 115, 115, 115),
+                imagecolorallocate($this->image, self::$color[0], self::$color[1], self::$color[2]),
                 $letter['font'],
                 $letter['letter']
             );
@@ -333,6 +351,7 @@ class Image
             for ($z = 0; $z < $n; ++$z) {
                 $x = $x0 + $z * $dx + $amp * $dy * sin($k * $z * $step + $phi);
                 $y = $y0 + $z * $dy - $amp * $dx * sin($k * $z * $step + $phi);
+
                 imagefilledrectangle($this->image, $x, $y, $x + $lwid, $y + $lwid, $noise);
             }
         }

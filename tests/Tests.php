@@ -158,6 +158,21 @@ class Tests extends PHPUnit_Framework_TestCase
         $this->assertNotTrue(isset($_POST[$session]));
     }
 
+    public function testSetColor()
+    {
+        $session = Captcha\Captcha::sessionName();
+
+        Captcha\Captcha::setColor(10, 10, 10);
+
+        $this->assertTrue(strpos(Captcha\Captcha::source(array(5, 6), 385, 90), 'data:image/png;base64,') === 0);
+        $this->assertTrue(!empty($_SESSION[$session]));
+
+        $this->assertFalse(Captcha\Captcha::check());
+
+        $this->assertTrue(isset($_SESSION[$session]));
+        $this->assertNotTrue(isset($_POST[$session]));
+    }
+
     public function testSetPadding()
     {
         $session = Captcha\Captcha::sessionName();

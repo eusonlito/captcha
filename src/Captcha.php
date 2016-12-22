@@ -70,6 +70,23 @@ class Captcha
     }
 
     /**
+     * Set the font color
+     *
+     * @param integer $r
+     *     Color red value
+     *
+     * @param integer $g
+     *     Color green value
+     *
+     * @param integer $b
+     *     Color blue value
+     */
+    public static function setColor($r, $g, $b)
+    {
+        Image::color($r, $g, $b);
+    }
+
+    /**
      * Set the background color
      *
      * @param integer $r
