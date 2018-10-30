@@ -57,7 +57,7 @@ A new simple and easy-to-implement captcha package.
 
     ... or ...
 
-    <?= Captcha::img(array($LETTERS_MIN, $LETTERS_MAX) $WIDTH, $HEIGHT); ?>
+    <?= Captcha::img(array($LETTERS_MIN, $LETTERS_MAX), $WIDTH, $HEIGHT); ?>
     <?= Captcha::input(array('class' => 'form-control')); ?>
 </div>
 ```
