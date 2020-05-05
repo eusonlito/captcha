@@ -9,6 +9,11 @@ namespace Eusonlito\Captcha;
 class Captcha
 {
     /**
+     * @var string
+     */
+    static protected $name = '';
+
+    /**
      * Set/Get the session variable name
      *
      * @param string $name
@@ -133,11 +138,23 @@ class Captcha
      */
     public static function source($count, $width, $height)
     {
-        Session::set($string = Stringify::get($count));
+        static::$string = Stringify::get($count);
 
-        $image = new Image($string, $width, $height);
+        Session::set(static::$string);
+
+        $image = new Image(static::$string, $width, $height);
 
         return $image->base64();
+    }
+
+    /**
+     * Returns the original image string
+     *
+     * @return string
+     */
+    public static function string()
+    {
+        return static::$string;
     }
 
     /**
