@@ -11,7 +11,7 @@ class Captcha
     /**
      * @var string
      */
-    static protected $name = '';
+    protected static $string = '';
 
     /**
      * Set/Get the session variable name
