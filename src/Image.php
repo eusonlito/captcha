@@ -202,7 +202,7 @@ class Image
                 'letter' => $text[$i],
                 'font' => $font,
                 'width' => $textSize['width'],
-                'y' => ((($height / 2) - ($textSize['height'] / 2)) + $textSize['ascent']),
+                'y' => intval((($height / 2) - ($textSize['height'] / 2)) + $textSize['ascent']),
                 'angle' => $angle,
                 'size' => $fontSize
             );
@@ -325,10 +325,10 @@ class Image
         for ($i = 0; $i < $lines; ++$i) {
             $x = $width * (1 + $i) / ($lines + 1);
             $x += (0.5 - $this->frand()) * $width / $lines;
-            $y = mt_rand($height * 0.1, $height * 0.9);
+            $y = mt_rand(intval($height * 0.1), intval($height * 0.9));
 
             $theta = ($this->frand() - 0.5) * M_PI * 0.7;
-            $len = mt_rand($width * 0.4, $width * 0.7);
+            $len = mt_rand(intval($width * 0.4), intval($width * 0.7));
             $lwid = mt_rand(0, 2);
 
             $k = ($this->frand() * 0.6) + 0.2;
@@ -343,8 +343,8 @@ class Image
             $y0 = $y - (0.5 * $len * sin($theta));
 
             for ($z = 0; $z < $n; ++$z) {
-                $x = $x0 + $z * $dx + $amp * $dy * sin($k * $z * $step + $phi);
-                $y = $y0 + $z * $dy - $amp * $dx * sin($k * $z * $step + $phi);
+                $x = intval($x0 + $z * $dx + $amp * $dy * sin($k * $z * $step + $phi));
+                $y = intval($y0 + $z * $dy - $amp * $dx * sin($k * $z * $step + $phi));
 
                 imagefilledrectangle($this->image, $x, $y, $x + $lwid, $y + $lwid, $noise);
             }
